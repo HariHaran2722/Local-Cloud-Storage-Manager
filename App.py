@@ -1,14 +1,19 @@
 from flask import Flask,jsonify,request,send_from_directory
+
 import os
+
 STORAGE_FOLDER = 'storage'
 os.makedirs('storage', exist_ok=True)
+
 app = Flask(__name__)
+
 @app.route('/')
 def home():
     return "Cloud Storage Explorer"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     
@@ -34,9 +39,11 @@ def download_file(filename):
 @app.route('/delete/<filename>',methods=['DELETE'])
 def delete_file(filename):
     file_path=os.path.join(STORAGE_FOLDER,filename)
+
     if os.path.exists(file_path):
         os.remove(file_path)
         return jsonify({'message': 'File deleted successfully'})
+
     else:
         return jsonify({'error': 'File not found'}), 404
 
